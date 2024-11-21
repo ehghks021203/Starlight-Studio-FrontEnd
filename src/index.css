@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'Sejong Geulggot';
+  src: url('assets/fonts/SejongGeulggot.otf')
+    format("opentype");
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 스크롤바 전체 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* 스크롤바 트랙 (배경) */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 스크롤바 손잡이 */
+::-webkit-scrollbar-thumb {
+  background: #b3b3b3;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+/* 스크롤바 호버 시 */
+::-webkit-scrollbar-thumb:hover {
+  background: #909090;
+}
