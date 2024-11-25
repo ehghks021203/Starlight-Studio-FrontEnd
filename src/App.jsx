@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GlobalStyle from './GlobalStyle';
 import Login from './components/Login';
 import MainPage from './components/MainPage';
+import ShareMyBook from './components/ShareMyBook';
 import Loading from './components/Loading';
 
 function App() {
@@ -57,24 +59,13 @@ function App() {
   }
 
   return (
-    <>
+    <Router>
       <GlobalStyle />
       <div className="app">
-        {username ? (
-          <MainPage onLogin={(name) => {
-              localStorage.setItem('username', name);
-              setUsername(name);
-            }}
-            showToast={showToast}
-          />
-        ) : (
-          <Login onLogin={(name) => {
-              localStorage.setItem('username', name);
-              setUsername(name);
-            }} 
-            showToast={showToast}
-          />
-        )}
+        <Routes>
+          <Route path="/" element={username ? <MainPage onLogin={setUsername} showToast={showToast} /> : <Login onLogin={setUsername} showToast={showToast} />} />
+          <Route path="/share" element={<ShareMyBook />} />
+        </Routes>
 
         {/* Toast Container */}
         <ToastContainer
@@ -90,7 +81,7 @@ function App() {
           theme="dark"
         />
       </div>
-    </>
+    </Router>
     
   );
 }

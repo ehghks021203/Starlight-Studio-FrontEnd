@@ -112,7 +112,7 @@ export const Input = styled.input`
 
 export const Button = styled.button`
   padding: 12px 24px;
-  background: #4b8ef5; /* 푸른색 버튼 */
+  background: #808080;
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -121,11 +121,14 @@ export const Button = styled.button`
   transition: background 0.3s ease;
 
   &:hover {
-    background: #3b7acc; /* 푸른색 강조 */
-  }
-
-  &:focus {
-      outline: none;
-      box-shadow: 0 0 8px rgba(112, 161, 255, 0.6); /* 버튼 포커스 시 그림자 */
+    background: #646464;
   }
 `;
+
+export const ConfirmButton = styled(Button)`
+  background: #ffb74d;
+
+  &:hover {
+    background: #c68e3c;
+  }
+`

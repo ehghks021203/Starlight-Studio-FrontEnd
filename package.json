@@ -1,6 +1,7 @@
 {
   "name": "gen-fairy-tale",
-  "version": "0.1.0",
+  "homepage": "/", 
+  "version": "1.2.3",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.13.5",
@@ -13,14 +14,16 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-pageflip": "^2.0.3",
+    "react-router-dom": "^7.0.1",
     "react-scripts": "5.0.1",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.6",
     "styled-components": "^6.1.13",
+    "sweetalert2": "^11.14.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -44,7 +47,6 @@
     ]
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
   "author": "",
   "license": "ISC"
 }

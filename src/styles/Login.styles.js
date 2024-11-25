@@ -80,4 +80,9 @@ export const LoginButton = styled.button`
     transform: translateY(-3px);
     box-shadow: 0px 5px 15px rgba(244, 208, 63, 0.5);
   }
+
+  &:disabled {
+    opacity:0.7;
+    background: gray;
+  }
 `;

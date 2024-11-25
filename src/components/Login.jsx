@@ -1,5 +1,8 @@
+// react
 import React, { useState } from 'react';
-import axios from 'axios';
+// axios api
+import { fetchUserLogin } from '../utils/api';
+// styles & components
 import * as Styled from "../styles/Login.styles";
 import StarryBackground from './StarryBackground';
 
@@ -15,14 +18,17 @@ function Login({ onLogin, showToast }) {
     }
 
     setLoading(true); // 로딩 시작
-    axios.post(`${process.env.REACT_APP_API_URL}/user?user=${username}&key=${authCode}`, {
-      // Body Empty
+    fetchUserLogin({
+      user: username,
+      key: authCode,
     }).then((response) => {
       console.log(response)
       if (response.data.result === "success") {
         localStorage.setItem('username', username); // localStorage에 저장
         localStorage.setItem('key', authCode);
         onLogin(username); // 로그인 콜백 호출
+      } else {
+        showToast(response.data.msg, "error");
       }
     }).catch ((error) =>{
       console.error('로그인 요청 중 오류 발생:', error);

@@ -1,56 +1,78 @@
+// react
 import React, { useState, useEffect } from 'react';
+// axios api
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { fetchDeleteStory, fetchUserLogin } from '../utils/api';
+// styles & components
 import * as Styled from "../styles/MainPage.styles";
 import palette from '../styles/styles';
+import PopupModal from './PopupModal';
 import { SyncLoader } from 'react-spinners';
-import StoryEditor from './StoryEditor';
 import StarryBackground from './StarryBackground';
+import StoryEditor from './StoryEditor';
 import LunarIcon from '../assets/images/lunar-icon.png';
 import TrashIcon from '../assets/svgs/trash.svg';
-
 
 function MainPage({ onLogin, showToast }) {
   const [isLoading, setLoading] = useState(true); // 로딩 상태 관리
   const [storyList, setStoryList] = useState([]); // 동화책 목록 데이터
   const [currentStory, setCurrentStory] = useState(null);
+  const [modalData, setModalData] = useState(null); 
+  const [isModalOpen, setModalOpen] = useState(false);
 
+  // 페이지 첫 렌더링 시 실행
   useEffect(() => {
     pageReload();
   }, []);
 
+  // 페이지 리로드 함수
   const pageReload = () => {
     const storedUsername = localStorage.getItem('username');
     const storedAuthCode = localStorage.getItem('key');
-    axios.post(`${process.env.REACT_APP_API_URL}/user?user=${storedUsername}&key=${storedAuthCode}`, {
-      // Body Empty
+    fetchUserLogin({
+      user: storedUsername,
+      key: storedAuthCode,
     }).then((response) => {
       if (response.data.result === "success") {
         setStoryList(response.data.data); // 동화책 데이터 저장
       }
     }).catch((error) => {
-      showToast("다시 로그인 해 주세요.", "error");
-      localStorage.removeItem('username');
-      localStorage.removeItem('key');
-      window.location.reload();
+      if (axios.isCancel(error)) {
+        console.log(error);
+      } else {
+        showToast("다시 로그인 해 주세요.", "error");
+        localStorage.removeItem('username');
+        localStorage.removeItem('key');
+        window.location.reload();
+      }
     }).finally(() => {
       setLoading(false);
     });
   };
 
+  // 새로운 동화책 만들기 핸들러
   const handleNewBook = () => {
-    setCurrentStory(null);
+    if (!currentStory) { setCurrentStory(""); }
+    else  { setCurrentStory(null); }
   };
 
+  // 동화책 열기 핸들러
   const handleOpenStory = (story) => {
+    console.log(story);
     setCurrentStory(story);
   };
 
+  const handleDeleteStoryButton = (story) => {
+    setModalData({ id: story.id, title: story.title });
+    setModalOpen(true);
+  };
+
+  // 동화책 삭제하기 핸들러
   const handleDeleteStory = (storyId) => {
     const storedUsername = localStorage.getItem('username');
-    axios.post(`${process.env.REACT_APP_API_URL}/delstory?story_id=${storyId}&user=${storedUsername}`, {
-      // Body Empty
+    fetchDeleteStory({
+      storyId: storyId,
+      user: storedUsername,
     }).then((response) => {
       if (response.data.result === "success") {
         showToast("이야기가 삭제되었습니다.", "success");
@@ -65,6 +87,7 @@ function MainPage({ onLogin, showToast }) {
     });
   };
 
+  // 로그아웃 핸들러
   const handleLogout = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('key');
@@ -106,7 +129,7 @@ function MainPage({ onLogin, showToast }) {
                       src={TrashIcon}
                       onClick={(e) => {
                         e.stopPropagation(); // 클릭 이벤트 전파 차단
-                        handleDeleteStory(story.id);
+                        handleDeleteStoryButton(story);
                       }}
                     />
                   </Styled.KebabMenuWrapper>
@@ -125,7 +148,14 @@ function MainPage({ onLogin, showToast }) {
         />
       </Styled.MainContent>
 
-      
+      {isModalOpen && (
+        <PopupModal
+          onClose={() => setModalOpen(false)}
+          onConfirm={handleDeleteStory}
+          storyId={modalData.id}
+          storyTitle={modalData.title}
+        />
+      )}
     </Styled.MainPageWrapper>
   );
 }
