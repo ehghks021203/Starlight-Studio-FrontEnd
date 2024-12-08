@@ -1,7 +1,6 @@
 @font-face {
-  font-family: 'Sejong Geulggot';
-  src: url('assets/fonts/SejongGeulggot.otf')
-    format("opentype");
+  font-family: "Sejong Geulggot";
+  src: url("assets/fonts/SejongGeulggot.otf") format("opentype");
 }
 
 body {

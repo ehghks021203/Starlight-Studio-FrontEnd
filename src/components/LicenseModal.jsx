@@ -2,18 +2,8 @@ import React, { useState } from "react";
 import * as Styled from "../styles/PopupModal.styles";
 import { useEffect } from "react";
 
-const PopupModal = ({ onClose, onConfirm, storyId, storyTitle }) => {
+const LicenseModal = ({ onClose }) => {
   const [isClosing, setClosing] = useState(false);
-  const [title, setTitle] = useState("");
-
-  useEffect(() => {
-    setTitle(storyTitle);
-  }, []);
-
-  const handleConfirm = () => {
-    onConfirm(storyId);
-    closeModal();
-  };
 
   const closeModal = () => {
     setClosing(true);
@@ -30,23 +20,19 @@ const PopupModal = ({ onClose, onConfirm, storyId, storyTitle }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <Styled.ModalHeader>
-          <Styled.Title>동화책을 삭제할까요?</Styled.Title>
+          <Styled.Title>라이선스</Styled.Title>
         </Styled.ModalHeader>
         <Styled.ModalBody>
           <Styled.Content>
-            삭제하면 다시 돌아올 수 없어요. 확인해 주세요!
+            이 웹사이트는 세종글꽃체를 사용하여 작성되었습니다.
           </Styled.Content>
-          <Styled.DeleteStoryTitle>"{title}"</Styled.DeleteStoryTitle>
         </Styled.ModalBody>
         <Styled.ModalFooter>
-          <Styled.DeleteButton onClick={handleConfirm}>
-            삭제
-          </Styled.DeleteButton>
-          <Styled.Button onClick={closeModal}>취소</Styled.Button>
+          <Styled.Button onClick={closeModal}>닫기</Styled.Button>
         </Styled.ModalFooter>
       </Styled.ModalContainer>
     </Styled.ModalOverlay>
   );
 };
 
-export default PopupModal;
+export default LicenseModal;

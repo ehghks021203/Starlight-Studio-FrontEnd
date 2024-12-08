@@ -33,7 +33,7 @@ export const Title = styled.h1`
 
 export const SubTitle = styled.h1`
   font-family: "Sejong Geulggot";
-  font-size: 1.0rem;
+  font-size: 1rem;
   margin-bottom: 40px;
   color: ${palette.white};
   text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.6);
@@ -82,7 +82,7 @@ export const LoginButton = styled.button`
   }
 
   &:disabled {
-    opacity:0.7;
+    opacity: 0.7;
     background: gray;
   }
 `;

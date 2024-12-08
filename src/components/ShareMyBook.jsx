@@ -1,77 +1,138 @@
-import React, { useState, useEffect, forwardRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect, forwardRef } from "react";
+import { useLocation } from "react-router-dom";
 import * as Styled from "../styles/ShareMyBook.styles";
-import Modal from './BottomModal';
-import { MoonLoader } from 'react-spinners';
-import HTMLFlipBook from 'react-pageflip';
-import Loading from './Loading';
-import StarryBackground from './StarryBackground';
-import { fetchGetStory, fetchNewStory } from '../utils/api';
+import HTMLFlipBook from "react-pageflip";
+import Loading from "./Loading";
+import StarryBackground from "./StarryBackground";
+import { fetchGetStoryById } from "../utils/api";
+
+// Image 컴포넌트
+const Image = forwardRef(({ image, number }, ref) => (
+  <Styled.Page ref={ref}>
+    {image && (
+      <Styled.PageImage
+        src={`${process.env.REACT_APP_IMG_URL}${image.replace(
+          "/home/ubuntu/public_html",
+          ""
+        )}`}
+        alt="storybook"
+      />
+    )}
+    <Styled.PageNumber left={true}>{number}</Styled.PageNumber>
+  </Styled.Page>
+));
+
+// Text 컴포넌트
+const Text = forwardRef(({ text, number }, ref) => (
+  <Styled.Page ref={ref}>
+    <Styled.PageText>{text}</Styled.PageText>
+    <Styled.PageNumber left={false}>{number}</Styled.PageNumber>
+  </Styled.Page>
+));
 
 const ShareMyBook = () => {
   const location = useLocation();
   const [isLoading, setLoading] = useState(false);
   const [pages, setPages] = useState([]);
+  const [storyId, setStoryId] = useState(null);
   const [currentBookTitle, setCurrentBookTitle] = useState("");
-  
+  const [currentUsername, setCurrentUsername] = useState("");
+  const [currentBookCover, setCurrentBookCover] = useState(null);
+
+  // 동화책 데이터를 불러오는 로직
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const user = params.get('user');
-    const title = params.get('title');
-    if (user && title) {
-      const decodedTitle = decodeURIComponent(title);
-      const decodedUsername = decodeURIComponent(user);
-      console.log("Decoded Title: ", decodedTitle);
-      console.log("Decoded Username: ", decodedUsername);
+    const id = params.get("id");
+    if (id) {
       setLoading(true);
-
-      // 동화책 불러오는 엔드포인트로 통신 시작
-      fetchGetStory({
-        title: decodedTitle,
-        user: decodedUsername,
-      }).then((response) => {
-        if (response.data.result === "success") {
-          console.log(response.data.data);
-          // 동화책의 제목을 불러오기
-          setCurrentBookTitle(decodedTitle);
-          // 동화책의 전체 내용을 pages에 저장
-          setPages(response.data.data);
-        }
-      }).catch((error) => {
-        console.log(error);
-      }).finally(() => {
-        // 모든 과정이 끝나면 로딩 끝
-        setLoading(false);
-      });
+      fetchGetStoryById({ storyId: id })
+        .then((response) => {
+          if (response.data.result === "success") {
+            console.log(response.data);
+            setCurrentBookTitle(response.data.data[0].title);
+            setCurrentUsername(response.data.data[0].username);
+            setCurrentBookCover(
+              response.data.data[0].cover.replace(
+                "/home/ubuntu/public_html",
+                ""
+              )
+            );
+            setStoryId(id);
+            setPages(response.data.data);
+          }
+        })
+        .catch((error) => {
+          console.error("동화책 데이터를 불러오는 데 실패했습니다:", error);
+          setStoryId(null);
+        })
+        .finally(() => setLoading(false));
     }
   }, [location]);
 
-  const Image = forwardRef((props, ref) => {
-      return (
-        <Styled.Page ref={ref}>
-          <div />
-          {props.image && (<Styled.PageImage src={`${process.env.REACT_APP_IMG_URL}${props.image.replace('/home/ubuntu/public_html', '')}`} alt="storybook" />)}
-          <Styled.PageNumber left={true}>{props.number}</Styled.PageNumber>
-        </Styled.Page>
-      );
-    }
-  );
+  // PDF 생성 함수
+  const exportToPDF = async () => {};
 
-  const Text = forwardRef((props, ref) => {
-      return (
-        <Styled.Page ref={ref}>
-          <div />
-          <Styled.PageText>{props.text}</Styled.PageText>
-          <Styled.PageNumber left={false}>{props.number}</Styled.PageNumber>
-        </Styled.Page>
-      );
+  // FlipBook 페이지 생성 함수
+  const renderPages = () => {
+    if (!pages || pages.length === 0) {
+      console.error("Pages 배열이 비어 있습니다.");
+      return [];
     }
-  );
+
+    const bookPages = pages.map((page, index) => [
+      <Image
+        key={`${index}-image`}
+        image={page.image}
+        number={index * 2 + 1}
+      />,
+      <Text key={`${index}-text`} text={page.context} number={index * 2 + 2} />,
+    ]);
+
+    return bookPages.flat();
+  };
 
   if (isLoading) {
+    return <Loading />;
+  }
+
+  if (storyId) {
     return (
-      <Loading/>
+      <Styled.ShareWrapper>
+        <StarryBackground />
+        <Styled.InnerContainer>
+          <HTMLFlipBook
+            width={500}
+            height={500}
+            minWidth={520}
+            maxWidth={520}
+            maxShadowOpacity={0.7}
+            showCover={true}
+            mobileScrollSupport={false}
+            className="html-flip-book"
+          >
+            <Styled.PageCover
+              key={1}
+              bgImage={
+                currentBookCover
+                  ? `${
+                      process.env.REACT_APP_IMG_URL
+                    }${currentBookCover}?time=${new Date().getTime()}`
+                  : "none"
+              }
+            >
+              <Styled.PageCoverTitle>{currentBookTitle}</Styled.PageCoverTitle>
+              <Styled.PageCoverAuthor>{currentUsername}</Styled.PageCoverAuthor>
+            </Styled.PageCover>
+            {(() => {
+              const renderedPages = renderPages();
+              return renderedPages;
+            })()}
+          </HTMLFlipBook>
+        </Styled.InnerContainer>
+        <Styled.FooterContainer>
+          {/*<Styled.FooterButton onClick={exportToPDF}>PDF로 내보내기</Styled.FooterButton>*/}
+        </Styled.FooterContainer>
+      </Styled.ShareWrapper>
     );
   }
 
@@ -79,34 +140,10 @@ const ShareMyBook = () => {
     <Styled.ShareWrapper>
       <StarryBackground />
       <Styled.InnerContainer>
-        <HTMLFlipBook
-          width={500}
-          height={500}
-          minWidth={520}
-          maxWidth={520}
-          maxShadowOpacity={0.7}
-          showCover={true}
-          mobileScrollSupport={false}
-        >
-          <Styled.PageCover key={1}>
-            <Styled.PageCoverTitle>
-              {currentBookTitle}
-            </Styled.PageCoverTitle>
-          </Styled.PageCover>
-          {(() => {
-            const bookPages = [];
-            for (let i = 0; i < pages.length; i += 1) {
-              const page = pages[i];
-              bookPages.push(<Image key={`${i+1}-image`} image={page.image} number={i*2 + 1} />);
-              bookPages.push(<Text key={`${i+1}-text`} text={page.context} number={i*2 + 2} />);
-            }
-            return bookPages;
-          })()}
-        </HTMLFlipBook>
+        <Styled.InnerText>올바른 동화책 id가 아니에요.</Styled.InnerText>
       </Styled.InnerContainer>
     </Styled.ShareWrapper>
   );
 };
-    
+
 export default ShareMyBook;
-    

@@ -137,3 +137,25 @@ export const fetchRequireImage = (params) => {
         cancelToken: cancelTokenSource.token
     });
 };
+
+// 동화책 id로 데이터 받아오기 api
+export const fetchGenCoverImage = (params) => {
+    if (cancelTokenSource) {
+        cancelTokenSource.cancel('request canceled');
+    }
+    cancelTokenSource = axios.CancelToken.source();
+    return api.post(`/gencover?story_id=${params.storyId}&user=${params.user}`, {}, {
+        cancelToken: cancelTokenSource.token
+    });
+};
+
+// 동화책 id로 데이터 받아오기 api
+export const fetchGetStoryById = (params) => {
+    if (cancelTokenSource) {
+        cancelTokenSource.cancel('request canceled');
+    }
+    cancelTokenSource = axios.CancelToken.source();
+    return api.post(`/sharestory?story_id=${params.storyId}`, {}, {
+        cancelToken: cancelTokenSource.token
+    });
+};

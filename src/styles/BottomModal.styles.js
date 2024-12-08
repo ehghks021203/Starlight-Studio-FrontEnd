@@ -24,80 +24,90 @@ const modalFadeOut = keyframes`
 `;
 
 export const ModalOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    z-index: 1000;
-    cursor: pointer;
-    animation: ${props => props.isClosing ? css`${modalFadeOut} 0.3s ease-out` : ''};
-    transition: all 0.3s ease-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+  cursor: pointer;
+  animation: ${(props) =>
+    props.isClosing
+      ? css`
+          ${modalFadeOut} 0.3s ease-out
+        `
+      : ""};
+  transition: all 0.3s ease-out;
 `;
 
 export const ModalContainer = styled.div`
-    width: 70%;
-    background: rgba(40, 40, 70, 0.9);
-    border-radius: 12px 12px 0px 0px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    animation: ${modalSlideUp} 0.3s ease-out;
-    cursor: default;
-    
-    animation: ${props => props.isClosing ? css`${modalFadeOut} 0.3s ease-out` : ''};
+  width: 70%;
+  background: rgba(40, 40, 70, 0.9);
+  border-radius: 12px 12px 0px 0px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  animation: ${modalSlideUp} 0.3s ease-out;
+  cursor: default;
+
+  animation: ${(props) =>
+    props.isClosing
+      ? css`
+          ${modalFadeOut} 0.3s ease-out
+        `
+      : ""};
 `;
 
 export const ModalHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    color: #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: #eaeaea;
 `;
 
 export const ModalBody = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
-    label {
-        font-size: 16px;
-        color: #b5b5b5;
+  label {
+    font-size: 16px;
+    color: #b5b5b5;
+  }
+
+  input {
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #eaeaea;
+    outline: none;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    text-align: center;
+
+    &::placeholder {
+      color: #777;
+      text-align: center;
     }
 
-    input {
-        padding: 12px;
-        font-size: 16px;
-        border: none;
-        border-radius: 5px;
-        background: rgba(255, 255, 255, 0.1);
-        color: #eaeaea;
-        outline: none;
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
-        text-align: center;
-
-        &::placeholder {
-            color: #777;
-            text-align: center;
-        }
-
-        &:focus {
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
-        }
+    &:focus {
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
     }
+  }
 `;
 
 export const ModalFooter = styled.div`
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
 `;
 
 export const Title = styled.div`
@@ -107,8 +117,7 @@ export const Title = styled.div`
   color: #eaeaea; /* 밝은 색 텍스트 */
 `;
 
-export const Input = styled.input`
-`;
+export const Input = styled.input``;
 
 export const Button = styled.button`
   padding: 12px 24px;
@@ -131,4 +140,4 @@ export const ConfirmButton = styled(Button)`
   &:hover {
     background: #c68e3c;
   }
-`
+`;

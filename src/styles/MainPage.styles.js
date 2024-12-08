@@ -87,7 +87,6 @@ export const StoryButton = styled.button`
   }
 `;
 
-
 export const StoryTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
@@ -115,7 +114,7 @@ export const LogoutButton = styled.button`
   padding: 10px 20px;
   margin-left: 20px;
   margin-right: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   background: #e74c3c;
   color: #383755;
   border: none;
@@ -130,10 +129,44 @@ export const LogoutButton = styled.button`
   }
 `;
 
+export const SideFooterContainer = styled.div`
+  display: flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const SideFooterButton = styled.button`
+  background: none;
+  border: 0px solid transparent;
+  color: ${palette.white};
+  font-size: 0.8rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: ${palette.gray};
+  }
+`;
+
+export const SideFooterText = styled.div`
+  margin-top: 10px;
+  margin-bottom: 20px;
+  background: none;
+  border: 0px solid transparent;
+  color: ${palette.white};
+  font-size: 0.84rem;
+  text-align: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+`;
+
 // 새로운 동화책 만들기 버튼 스타일
 export const NewBookButton = styled.button`
   padding: 15px;
-  width: 250px; 
+  width: 250px;
   height: 50px;
   background: ${palette.yellow};
   color: #383755;
@@ -157,5 +190,5 @@ export const MainContent = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh; /* 화면 높이를 Sidebar와 일치 */
-  background: #ffffff;
+  background: transparent;
 `;

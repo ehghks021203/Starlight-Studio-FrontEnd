@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import * as Styled from "../styles/BottomModal.styles";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 const BottomModal = ({ modalType, onClose, onConfirm }) => {
   const [text, setText] = useState("");
@@ -19,7 +19,7 @@ const BottomModal = ({ modalType, onClose, onConfirm }) => {
       setTitle("어떤 표지를 만들고 싶나요?");
       setPh("요청사항을 입력해주세요!");
     }
-  }, [])
+  }, []);
 
   const handleConfirm = () => {
     onConfirm(text);
@@ -27,7 +27,7 @@ const BottomModal = ({ modalType, onClose, onConfirm }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleConfirm(); // 엔터키 눌렀을 때 로그인 처리
     }
   };
@@ -42,7 +42,10 @@ const BottomModal = ({ modalType, onClose, onConfirm }) => {
 
   return (
     <Styled.ModalOverlay isClosing={isClosing} onClick={closeModal}>
-      <Styled.ModalContainer isClosing={isClosing} onClick={(e) => e.stopPropagation()}>
+      <Styled.ModalContainer
+        isClosing={isClosing}
+        onClick={(e) => e.stopPropagation()}
+      >
         <Styled.ModalHeader>
           <Styled.Title>{title}</Styled.Title>
         </Styled.ModalHeader>
@@ -56,7 +59,9 @@ const BottomModal = ({ modalType, onClose, onConfirm }) => {
           />
         </Styled.ModalBody>
         <Styled.ModalFooter>
-          <Styled.ConfirmButton onClick={handleConfirm}>확인</Styled.ConfirmButton>
+          <Styled.ConfirmButton onClick={handleConfirm}>
+            확인
+          </Styled.ConfirmButton>
           <Styled.Button onClick={closeModal}>취소</Styled.Button>
         </Styled.ModalFooter>
       </Styled.ModalContainer>
