@@ -35,7 +35,7 @@
 
 <br/>
 
-## **Stacks:**
+## **🛠️ Stacks:**
 
 <p align="center">
   <a href="https://skillicons.dev">
